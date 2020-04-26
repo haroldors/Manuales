@@ -1,0 +1,61 @@
+# Manual de Instalacion de apache y PHP con conector para mysql y mssql en Linux #
+
+## Instalacion de Apache ##
+
+A continuación detallaremos el paso a paso considerando que tiene acceso al modo administrador para esto en el caso de debian o ubutu debe dar acceso al modo su y luego ingresar la password de administrador
+
+* para la instalación de apache debemos ingresar el siguiente comando
+
+`apt install libapache2-mod-php`
+
+* Luego con el siguiente comando limpias la pantalla
+
+`clear`
+
+* Luego con el siguiente comando verificas que este instalado ok el apache y también visualizas la versión instalada
+
+`php --version`
+
+* Luego con el siguiente comando verificas que se instale los modulos para conexión a mysql
+
+`apt-get install php-mysql`
+
+* con el siguiente comando habilitaremos los parámetros de configuración ya que crearemos el archivo php.ini utilizando en el archivo que viene cargado por defecto
+
+`cp /usr/lib/php/7.3/php.ini-production.cli /etc/php/7.3/cli/php.ini`
+
+* con el siguiente comando podemos editar si queremos que se 
+
+`nano /etc/php/7.3/apache2/php.ini`
+
+`/etc/init.d/apache2 restart`
+
+`/etc/init.d/apache2 status`
+
+`clear`
+
+`nano /etc/apache2/sites-available/000-default.conf`
+
+`grep -R "/var/www" /etc/apache2`
+
+`clear`
+
+`nano /etc/apache2/sites-available/000-default.conf`
+
+`nano /etc/apache2/sites-available/default-ssl.conf`
+
+`nano /etc/apache2/sites-enabled/000-default.conf`
+
+`nano /etc/apache2/apache2.conf`
+
+`/etc/init.d/apache2 restart`
+
+`/etc/init.d/apache2 status`
+
+`apt-get install php7.3`
+
+`/etc/init.d/apache2 restart`
+
+`/etc/init.d/apache2 status`
+
+`chmod -R 777 BrainiacV08`
