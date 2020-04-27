@@ -2,7 +2,7 @@
 
 ## Instalacion de Apache ##
 
-A continuación detallaremos el paso a paso considerando que tiene acceso al modo administrador para esto en el caso de debian o ubutu debe dar acceso al modo su y luego ingresar la password de administrador
+A continuación detallaremos el paso a paso considerando que tiene acceso al modo administrador para esto en el caso de debian o ubuntu debe dar acceso al modo su y luego ingresar la password de administrador
 
 * para la instalación de apache debemos ingresar el siguiente comando
 
@@ -24,16 +24,30 @@ A continuación detallaremos el paso a paso considerando que tiene acceso al mod
 
 `cp /usr/lib/php/7.3/php.ini-production.cli /etc/php/7.3/cli/php.ini`
 
-* con el siguiente comando podemos editar si queremos que se 
+* con el siguiente comando podemos editar si queremos que se editaremos la configuracion en el archivo con el siguiente comando
 
 `nano /etc/php/7.3/apache2/php.ini`
 
+* al editar el archivo modificamos o agregamos la siguiente sentencia
+``
+<Directory /var/www/ruta>
+  Options -Indexes
+</Directory>
+``
+
+* Luego reiniciaremos apache para que aplique las modificaciones que realizamos
+
 `/etc/init.d/apache2 restart`
+
+* Luego visualizaremos el estado de apache para asegurarnos que no aparezca ningún error
 
 `/etc/init.d/apache2 status`
 
+* Luego limpiaremos la pantalla para poder continuar
+
 `clear`
 
+* Luego editamos en archivo 
 `nano /etc/apache2/sites-available/000-default.conf`
 
 `grep -R "/var/www" /etc/apache2`
