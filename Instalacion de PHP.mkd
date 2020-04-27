@@ -29,7 +29,7 @@ A continuación detallaremos el paso a paso considerando que tiene acceso al mod
 `nano /etc/php/7.3/apache2/php.ini`
 
 * al editar el archivo modificamos o agregamos la siguiente sentencia
-```
+```html
 <Directory /var/www/ruta>
   Options -Indexes
 </Directory>
