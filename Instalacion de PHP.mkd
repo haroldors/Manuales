@@ -14,7 +14,10 @@ A continuación detallaremos el paso a paso considerando que tiene acceso al mod
 
 * para la instalación de apache debemos ingresar el siguiente comando
 
-`apt install libapache2-mod-php`
+```
+apt install libapache2-mod-php
+apt install apache2
+```
 
 * Luego con el siguiente comando limpias la pantalla
 
@@ -28,11 +31,28 @@ A continuación detallaremos el paso a paso considerando que tiene acceso al mod
 
 `cp /usr/lib/php/7.3/php.ini-production.cli /etc/php/7.3/cli/php.ini`
 
-* con el siguiente comando podemos editar si queremos que se editaremos la configuracion en el archivo con el siguiente comando
+* con el siguiente comando podemos editaremos la configuración en el archivo para visualizar los errores
 
-`nano /etc/php/7.3/apache2/php.ini`
+`nano /etc/php5/apache2/php.ini`
 
-* al editar el archivo modificamos o agregamos la siguiente sentencia, la cual nos permitirá poder visualizar los herrores que nuestros archivos php al momento de ejecutarse provoquen
+**Buscar (ctrl+w) la línea:**
+
+_display_errors = Off_
+
+**Sustituirla por:**
+
+_display_errors = On_
+
+* Luego se debe Guardar el archivo y reiniciar el servicio de Apache, para esto se debe ejecutar lo siguiente:
+
+`sudo /etc/init.d/apache2 restart`
+
+* para evitar que nuestro proyecto muestre el contenido de los directorios, debe editar el siguiente archivo
+
+`nano /etc/apache2/apache2.conf`
+
+* el siguiente contenido se le debe agregar al archivo indicado el punto anterior
+
 ```html
 <Directory /var/www/ruta>
   Options -Indexes
@@ -57,14 +77,15 @@ A continuación detallaremos el paso a paso considerando que tiene acceso al mod
 
 una vez editado debemos modificar las linea que indican lo siguiente
 
-```html
-DocumentRoot /var/www/html
-```
+`DocumentRoot /var/www/html`
+
 dejándola comentada con el símbolo # y luego agregando el path de la carpeta que contiene nuestro proyecto quedando como ejemplo lo siguiente
+
 ```html
 #DocumentRoot /var/www/html
 DocumentRoot /home/brainiac/Documentos/BrainiacV08
 ```
+
 * con el comando siguiente podemos ver que archivos contienen el path que debemos configurar correspondientes a la configuración de apache, si encontramos mas de uno aplicamos el paso anterior
 
 `grep -R "/var/www" /etc/apache2`
