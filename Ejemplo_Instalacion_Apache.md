@@ -20,7 +20,12 @@ Para estos sitios se aplicara la configuración para los puertos http y https co
 apt install libapache2-mod-php
 apt install apache2
 apt install php-mysql
-apt install php
+sudo su
+apt-get install curl apt-transport-https
+wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
+apt-get update
+apt-get install -y php7.3 php7.3-dev php7.3-xml php7.3-intl
 php --version
 ```
 
@@ -87,6 +92,29 @@ ServerAlias www.sistemadecontrol.cl
 #DocumentRoot /var/www/html
 DocumentRoot /var/www/sistemadecontrol
 ```
+* procedemos a guardar y ahora iremos a exportar desde Github el sitio completo creado para el subdominio comercialhummer el cual alojaremos en la raiz contenedora, para esto debemos aplicar los siguientes comandos
+
+```
+cd /var/www
+apt install git
+git clone https://github.com/haroldors/BrainiacV08.git
+cd /etc/apache2/sites-available/
+cp 000-default.conf comercialhummer.sistemadecontrol.cl.conf
+nano comercialhummer.sistemadecontrol.cl.conf
+```
+* Ahora modificaremos la información contenida por lo siguiente
+
+```
+ServerAdmin info@brainiac.cl
+ServerName comercialhummer.sistemadecontrol.cl
+ServerAlias www.comercialhummer.sistemadecontrol.cl
+#DocumentRoot /var/www/html
+DocumentRoot /var/www/BrainiacV08
+DirectoryIndex index.php
+<Directory /var/www/BrainiacV08>
+        Options -Indexes
+</Directory>
+```
 
 * una vez guardado los cambios procederemos a recargar apache para que aplique los cambios, para esto ejecutaremos el siguiente comando.
 
@@ -97,3 +125,67 @@ DocumentRoot /var/www/sistemadecontrol
 `/etc/init.d/apache2 status`
 
 >_Nota: En el caso de presentar algún error en la ejecución debería verificar los cambios aplicados en el archivo anterior._
+
+----
+
+## Instalación de Driver para MSSQL ##
+
+* Para instalar el driver ejecutaremos varias líneas de comando, las cuales aconsejo ejecutarlas una a una y no todas, de una vez. Considere que antes de aplicarlo que los siguientes comandos esta considerando que la versión de PHP es la 7.3 en el caso de tener otra versión instalada debe modificar el comando antes de aplicarlo
+
+  1. primero instalaremos los prerrequisitos
+
+      ```
+curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list
+exit
+sudo apt-get update
+sudo ACCEPT_EULA=Y apt-get install msodbcsql17
+# optional: for bcp and sqlcmd
+sudo ACCEPT_EULA=Y apt-get install mssql-tools
+echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
+echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+source ~/.bashrc
+# optional: for unixODBC development headers
+sudo apt-get install unixodbc-dev
+# optional: kerberos library for debian-slim distributions
+sudo apt-get install libgssapi-krb5-2
+sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
+locale-gen
+```
+
+  2. Instalaremos el driver PHP para Microsoft SQL Server
+
+      ```
+sudo apt-get install unixodbc-dev
+sudo pecl install sqlsrv
+sudo pecl install pdo_sqlsrv
+sudo su
+printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.3/mods-available/sqlsrv.ini
+printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/7.3/mods-available/pdo_sqlsrv.ini
+exit
+sudo phpenmod -v 7.3 sqlsrv pdo_sqlsrv
+```
+
+
+---
+
+## Habilitación de certificación Cerbot y puerto https ##
+
+* Instalaremos Certbot
+
+`sudo apt-get install certbot python-certbot-apache`
+
+* Ejecutaremos el siguiente comando para obtener un certificado y hacer que Certbot edite su configuración de Apache automáticamente para servirlo, activando el acceso HTTPS en un solo paso.
+
+`sudo certbot --apache`
+
+
+---
+
+---
+
+>```
+**Nota:** La información contenida en este documento es un extractó de la información contenida en el siguiente documento
+[drivers Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/connect/php/installation-tutorial-linux-mac?view=sql-server-ver15#installing-the-drivers-on-debian-8-9-and-10)
+[Prequerisitos de Drivers SQL Sever](https://docs.microsoft.com/en-us/sql/connect/php/installation-tutorial-linux-mac?view=sql-server-ver15#installing-the-drivers-on-debian-8-9-and-10)
+```
