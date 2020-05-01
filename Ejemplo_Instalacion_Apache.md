@@ -185,4 +185,4 @@ sudo phpenmod -v 7.3 sqlsrv pdo_sqlsrv
 
 [Link: Drivers Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/connect/php/installation-tutorial-linux-mac?view=sql-server-ver15#installing-the-drivers-on-debian-8-9-and-10)
 
-[Link: Prequerisitos de Drivers SQL Sever](https://docs.microsoft.com/en-us/sql/connect/php/installation-tutorial-linux-mac?view=sql-server-ver15#installing-the-drivers-on-debian-8-9-and-10)
+[Link: prerrequisitos de Drivers SQL Sever](https://docs.microsoft.com/en-us/sql/connect/php/installation-tutorial-linux-mac?view=sql-server-ver15#installing-the-drivers-on-debian-8-9-and-10)
