@@ -17,10 +17,10 @@ Para estos sitios se aplicara la configuración para los puertos http y https co
 
 
 ```
+su
 apt install libapache2-mod-php
 apt install apache2
 apt install php-mysql
-sudo su
 apt-get install curl apt-transport-https
 wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
 echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
@@ -55,15 +55,17 @@ php --version
 
 * para ello iremos nos dirigiremos a la carpeta raíz con los siguientes comandos
 
-```
-sudo cd /var/www
-sudo mkdir sistemadecontrol
-````
-* Ya con nuestra carpeta creada crearemos un archivo de ejemplo para que se despliegue y reemplacé lo que apache muestra por efecto.
 
 ```
-sudo nano /var/www/sistemadecontrol/index.html
+cd /var/www
+mkdir sistemadecontrol
 ```
+
+
+* Ya con nuestra carpeta creada crearemos un archivo de ejemplo para que se despliegue y reemplacé lo que apache muestra por efecto.
+
+
+`nano /var/www/sistemadecontrol/index.html`
 
 * El comando anterior utilizara el editor nano que nos permitirá agregar el siguiente contenido al archivo index.html
 
@@ -81,9 +83,7 @@ sudo nano /var/www/sistemadecontrol/index.html
 
 `nano /etc/apache2/sites-available/000-default.conf`
 
-* Encontraremos varias líneas de código de las cuales las que presentan el símbolo # se encuentran comentadas y el servidor no las esta considerando en la ejecución.
-comentamos el #DocumentRoot /var/www/html
-y agregaremos la instrucción con nuestro path actualizado donde debería quedar de la siguiente manera
+* Encontraremos varias líneas de código de las cuales las que presentan el símbolo # se encuentran comentadas y el servidor no las esta considerando en la ejecución. Comentamos el #DocumentRoot /var/www/html y agregaremos la instrucción con nuestro path actualizado donde debería quedar de la siguiente manera.
 
 ```
 ServerAdmin info@brainiac.cl
@@ -134,46 +134,45 @@ DirectoryIndex index.php
 
   1. primero instalaremos los prerrequisitos
 
-      ```
+```
 curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list
-sudo apt-get update
-sudo ACCEPT_EULA=Y apt-get install msodbcsql17
-sudo ACCEPT_EULA=Y apt-get install mssql-tools
+apt-get update
+ACCEPT_EULA=Y apt-get install msodbcsql17
+ACCEPT_EULA=Y apt-get install mssql-tools
 echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
 echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 source ~/.bashrc
-sudo apt-get install unixodbc-dev
-sudo apt-get install libgssapi-krb5-2
+apt-get install unixodbc-dev
+apt-get install libgssapi-krb5-2
 sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
 locale-gen
 ```
 
   2. Instalaremos el driver PHP para Microsoft SQL Server
 
-      ```
-sudo apt-get install unixodbc-dev
-sudo pecl install sqlsrv
-sudo pecl install pdo_sqlsrv
-sudo su
+```
+apt-get install unixodbc-dev
+pecl install sqlsrv
+pecl install pdo_sqlsrv
 printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.3/mods-available/sqlsrv.ini
 printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/7.3/mods-available/pdo_sqlsrv.ini
-exit
-sudo phpenmod -v 7.3 sqlsrv pdo_sqlsrv
+phpenmod -v 7.3 sqlsrv pdo_sqlsrv
 ```
 
 
 ---
 
+
 ## Habilitación de certificación Cerbot y puerto https ##
 
 * Instalaremos Certbot
 
-`sudo apt-get install certbot python-certbot-apache`
+`apt-get install certbot python-certbot-apache`
 
 * Ejecutaremos el siguiente comando para obtener un certificado y hacer que Certbot edite su configuración de Apache automáticamente para servirlo, activando el acceso HTTPS en un solo paso.
 
-`sudo certbot --apache`
+`certbot --apache`
 
 
 ---
