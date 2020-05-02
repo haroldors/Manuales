@@ -126,6 +126,25 @@ DirectoryIndex index.php
 
 >_Nota: En el caso de presentar algún error en la ejecución debería verificar los cambios aplicados en el archivo anterior._
 
+
+----
+
+## Modificacion de php.ini para visualizar los errores en php ##
+
+`nano /etc/php/7.3/apache2/php.ini`
+
+* una vez avierto el archivo buscaremos la linea que contenga el siguiente valor
+
+`display_errors = Off`
+
+* la sustituiremos por el siguinte valor
+
+`display_errors = On`
+
+* una vez Guardados los valores debemos ejecutar el siguiente comando
+
+`/etc/init.d/apache2 reload`
+
 ----
 
 ## Instalación de Driver para MSSQL ##
