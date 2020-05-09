@@ -1,5 +1,8 @@
 # Instalacion de Herramientas de Programacion en LinuxMint 19.1
 
+---
+---
+
 ## 1. Instalacion de Sublime-text 3
 
 ### Para instalar
@@ -12,14 +15,8 @@ echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sou
 sudo apt-get update
 sudo apt-get install sublime-text
 ```
-### Para cambiar el idioma 
 
-* se debe precionar ctrl+shift+P y seleccionar configurar idioma de pantalla
-
-* Luego se debe seleccionar el idioma que queremos
-
-* una vez instalado nos solicitara reiniciar el editor y luego aparecera el idioma
-
+---
 ## 2. Instalacion de Visual Studio Code
 
 * a continuacion se indican lo comandos para la instalacion de Visual Studio Code
@@ -32,6 +29,15 @@ sudo apt-get install apt-transport-https
 sudo apt-get update
 sudo apt-get install code
 ```
+### Para cambiar el idioma 
+
+* se debe precionar ctrl+shift+P y seleccionar configurar idioma de pantalla
+
+* Luego se debe seleccionar el idioma que queremos
+
+* una vez instalado nos solicitara reiniciar el editor y luego aparecera el idioma
+
+---
 
 ## 3. Instalacion de herramienta de Administracion de Base de datos dbeaver
 
