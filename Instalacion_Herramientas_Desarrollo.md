@@ -52,6 +52,34 @@ sudo apt-get install sublime-text
     * luego seleccionar **Package Control:** Install Package
     * luego se debe seleccionar FileIcons
 
+* Para Instalar puglin que permite minificar archivos css y js utilizaremos el puglin Minify
+    * primero debemos ejecutar por consola los siguientes comandos:
+    ```
+            apt install nodejs npm cleancss uglifyjs 
+            npm update -g clean-css-cli uglifycss js-beautify html-minifier uglify-js minjson svgo
+
+    ```
+    * lueego en Sublime Text se debe hacer click en preferencias
+    * luego en package controll
+    * luego seleccionar **Package Control:** Install Package
+    * luego se debe seleccionar Minify
+    * luego debe ir a preferences
+    * luego debe ir a Package Settings
+    * luego debe ir a Minify -> Setting Users
+    * en la seccion usuario que sale en el costado derecho debe agregar lo siguiente:
+    ```
+            {
+            "auto_minify_on_save": true
+            }
+    ``` 
+    * con estos parametros permitiremos, que cada vez que se guarde el archivo automticamente genere en paraleo un archivo minificado que es el que publicaremos despues.
+
+* Para corregir e problema de generar comentarios y asignar la tecla / del teclado numerico derecho, debemos hacer lo siguiente
+    * primero debemos hacer click en Preferences
+    * Luego hacer click en Key Bindings y en la seccion usuario que sale en el costado derecho debemos agregar lo siguiente:
+    ```
+            { "keys": ["ctrl+shift+keypad_divide"], "command": "toggle_comment", "args": { "block": true } }
+    ```
 
 
 ---
