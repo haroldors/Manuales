@@ -1,5 +1,12 @@
 # Cómo instalar LAMP en Debian 10 Buster #
 
+
+Este Documento es una recopilacion de informacion extraida de dos link 
+
+Link1 [https://chachocool.com/como-instalar-lamp-en-debian-10-buster/]
+
+LInk2 [https://chachocool.com/como-instalar-phpmyadmin-en-debian-10-buster/]
+
 ---
 ## Instalar PHP7.4 ##
 
@@ -156,3 +163,146 @@ Este script es simple, intenta conectar al sistema de bases de datos usando la f
 
 Accedemos de nuevo al servidor LAMP para probar este script mediante el navegador. Siguiendo el ejemplo, la URL en esta ocasión sería http://debian10.local/phptest.php).
 
+---
+# Cómo instalar phpMyAdmin en Debian 10 Buster #
+---
+
+En esta entrada veremos cómo instalar phpMyAdmin en Debian 10 Buster paso a paso. Al final de esta guía podrás administrar tu sistema de bases de datos MariaDB/MySQL tanto de forma local como remota a través de esta potente herramienta web. Con phpMyAdmin un usuario local podrá trabajar remotamente sin necesidad de activar el acceso remoto del servicio de bases de datos de tu servidor o VPS Debian 10. Además, podrás trabajar desde cualquier dispositivo conectado con un simple navegador, sin necesidad de instalar pesados clientes.
+---
+## Preparativos previos ##
+--
+
+Previo a la instalación de phpMyAdmin en Debian 10 conviene comprobar que PHP tiene instalados algunos módulos importantes, como php-mbstring, php-zip y php-bz2. Si no estuvieran presentes, los instalaríamos mediante apt. Antes actualizamos la lista de paquetes de los repositorios:
+
+```
+sudo apt update
+sudo apt -y upgrade
+sudo apt -y install php-bz2 php-mbstring php-zip
+```
+Una vez descargados e instalados estos módulos y sus dependencias, recargamos la configuración del servidor web o del servicio PHP, según nuestra configuración:
+
+```
+sudo systemctl reload apache2
+```
+
+---
+## Cómo descargar phpMyAdmin para Debian 10 Buster ##
+---
+En este ejemplo elegiremos la versión 5 y el paquete con formato .tar.xz. Si estás navegando en la máquina que vas a realizar la instalación puedes descargar directamente y guardar el archivo donde quieras.
+
+En mi caso, copiaré el enlace y realizaré la descarga desde consola mediante el comando wget:
+```
+wget https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-all-languages.tar.xz
+```
+---
+## Cómo instalar phpMyAdmin en Debian 10 Buster ##
+---
+Por razones de simplicidad, en esta guía vamos a instalar phpMyAdmin como una sección de la página web por defecto de Debian 10. Es recomendable tener instalado un certificado SSL para trabajar con protocolo seguro HTTPS, pero phpMyAdmin funcionará perfectamente bajo protocolo HTTP convencional.
+
+La web por defecto de Apache reside en /var/www/html/, por lo que esta será la ruta donde descomprimiremos el paquete:
+
+```
+sudo tar xf phpMyAdmin-5.0.2-all-languages.tar.xz -C /var/www/html/
+```
+La carpeta que se crea tiene un nombre muy largo, lo mejor es crear un enlace simbólico más corto, o directamente renombrar la carpeta:
+```
+ sudo mv /var/www/html/phpMyAdmin-5.0.2-all-languages/ /var/www/html/phpmyadmin
+ sudo chown www-data /var/www/html/phpmyadmin/
+```
+
+---
+## Preparación de la base de datos de phpMyAdmin ##
+---
+Ciertas características de phpMyAdmin requieren que la aplicación disponga de su propia base de datos.
+
+Usaremos el cliente de consola mysql para crear el usuario que manejará esta base de datos:
+```
+mysql -u root -p
+```
+Para MariaDB o MySQL 5, creamos el usuario como de costumbre:
+```
+> create user pma@localhost identified by 'XXXXXXXX';
+```
+Concedemos permisos a este usuario sobre la base de datos de phpMyAdmin:
+```
+> grant all privileges on phpmyadmin.* to pma@localhost;
+```
+Y ya podemos cerrar el cliente mysql:
+```
+> exit
+```
+Para inicializar la base de datos necesaria utilizaremos desde consola un archivo SQL previsto al efecto:
+```
+~$ cat /var/www/html/phpmyadmin/sql/create_tables.sql | mysql -u pma -p
+```
+---
+## Configurar phpMyAdmin en Debian 10 Buster ##
+---
+Aunque phpMyAdmin ya está listo para funcionar con la configuración por defecto, pero debes saber que es posible configurar phpMyAdmin en Debian 10.
+
+Existe una página de configuración accesible desde la carpeta setup/. En el ejemplo de esta guía sería accesible desde la URL http://debian10.local/phpmyadmin/setup/
+
+Este configurador es accesible porque no existe aún un archivo de configuración. No es deseable dejar el configurador accesible, puesto que como ves no está protegido por contraseña, así que tienes dos opciones:
+
+Usar un archivo mínimo de configuración por defecto.
+Crear la configuración desde el configurador y guardarla.
+
+---
+### Usar la configuración por defecto ###
+---
+El configurador permite una enorme cantidad de posibilidades y opciones, por lo que puede que no quieras perder tiempo y anularlo directamente.
+
+Para ello copia el archivo de configuración mínima de muestra presente en la carpeta de phpMyAdmin:
+
+```
+~$ sudo cp /var/www/html/phpmyadmin/config.sample.inc.php /var/www/html/phpmyadmin/config.inc.php
+```
+Editaremos este archivo para establecer un par de ajustes necesarios:
+
+```
+$cfg['blowfish_secret'] = ''; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
+```
+Se trata de una clave para cifrar las cookies de sesión. Especificaremos como valor una cadena de 32 caracteres aleatorios:
+
+```
+$cfg['blowfish_secret'] = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+```
+Configuramos también la conexión a la base de datos de phpMyAdmin, para lo que buscaremos esta sección:
+```
+/* User used to manipulate with storage */
+// $cfg['Servers'][$i]['controlhost'] = '';
+// $cfg['Servers'][$i]['controlport'] = '';
+// $cfg['Servers'][$i]['controluser'] = 'pma';
+// $cfg['Servers'][$i]['controlpass'] = 'pmapass';
+```
+Y activaremos las líneas del usuario y la contraseña, especificando la contraseña:
+```
+$cfg['Servers'][$i]['controluser'] = 'pma';
+$cfg['Servers'][$i]['controlpass'] = 'XXXXXXXX';
+```
+También activaremos todas las variables de la sección «Storage and tables«:
+
+```
+/* Storage database and tables */
+$cfg['Servers'][$i]['pmadb'] = 'phpmyadmin';
+$cfg['Servers'][$i]['bookmarktable'] = 'pma__bookmark';
+...
+$cfg['Servers'][$i]['designer_settings'] = 'pma__designer_settings';
+$cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';
+```
+Guardamos los cambios y cerramos el archivo.
+
+Al existir ya un archivo de configuración, el configurador queda bloqueado:
+
+Justo lo que pretendíamos, bloqueamos el configurador, pero phpMyAdmin funciona perfectamente con los valores por defecto.
+
+---
+### Crear una configuración a medida ###
+---
+Si prefieres configurar a medida las características de phpMyAdmin, puedes usar el configurador y bucear entre todas sus opciones y herramientas. Dado que los valores por defecto funcionan en la mayoría de escenarios, la configuración de phpMyAdmin en Debian 10 escapa a las pretensiones de esta guía.
+
+Lo que sí debes saber es que una vez que has realizado la configuración, NO es posible guardarla automáticamente. Lo que debes hacer es lo siguiente:
+
+En la parte inferior de la pantalla principal del configurador dispones de un botón «Descargar«. Al pulsarlo se descargará un archivo config.inc.php.
+Debes copiar ese archivo en la carpeta de phpMyAdmin, lo que se podrá hacer de una forma u otra, según si estás conectado de forma local o remota.
+Una vez copiado el archivo, el configurador quedará bloqueado.
