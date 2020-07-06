@@ -103,7 +103,7 @@ sudo apt-get install code
 ```
 ### Para cambiar el idioma 
 
-* se debe precionar ctrl+shift+P y seleccionar configurar idioma de pantalla
+* se debe precionar ctrl+shift+P y seleccionar configurar idioma de pantalla (Configure Display Language)
 
 * Luego se debe seleccionar el idioma que queremos
 
