@@ -168,6 +168,7 @@ Accedemos de nuevo al servidor LAMP para probar este script mediante el navegado
 ---
 
 En esta entrada veremos cómo instalar phpMyAdmin en Debian 10 Buster paso a paso. Al final de esta guía podrás administrar tu sistema de bases de datos MariaDB/MySQL tanto de forma local como remota a través de esta potente herramienta web. Con phpMyAdmin un usuario local podrá trabajar remotamente sin necesidad de activar el acceso remoto del servicio de bases de datos de tu servidor o VPS Debian 10. Además, podrás trabajar desde cualquier dispositivo conectado con un simple navegador, sin necesidad de instalar pesados clientes.
+
 ---
 ## Preparativos previos ##
 --
@@ -214,6 +215,21 @@ La carpeta que se crea tiene un nombre muy largo, lo mejor es crear un enlace si
 ## Preparación de la base de datos de phpMyAdmin ##
 ---
 Ciertas características de phpMyAdmin requieren que la aplicación disponga de su propia base de datos.
+para ello primero realizaremos lo siguiente
+```
+use mysql;
+update user set password=password("lapassword") where user='root';
+UPDATE user SET plugin="mysql_native_password" WHERE user="root";
+SELECT user, plugin FROM user;
+FLUSH PRIVILEGES;
+```
+luego aplicaremos lo siguiente para que se parametrizen los accesos
+
+```
+sudo mysql_secure_installation
+```
+
+
 
 Usaremos el cliente de consola mysql para crear el usuario que manejará esta base de datos:
 ```
@@ -223,9 +239,15 @@ Para MariaDB o MySQL 5, creamos el usuario como de costumbre:
 ```
 > create user pma@localhost identified by 'XXXXXXXX';
 ```
-Concedemos permisos a este usuario sobre la base de datos de phpMyAdmin:
+### Concedemos permisos a este usuario sobre la base de datos de phpMyAdmin: ###
+
+el siguiente comando es solo para asignar permiso a una base de datos , desde el localhost
 ```
-> grant all privileges on phpmyadmin.* to pma@localhost;
+grant all privileges on phpmyadmin.* to pma@localhost;
+```
+el siguiente codigo es para asignar todos los privilegios a cualquier base de datos y desde cualquier lugar y que pueda eredar los privilegios
+```
+GRANT ALL PRIVILEGES ON `*`.* TO 'pma'@'%' WITH GRANT OPTION;
 ```
 Y ya podemos cerrar el cliente mysql:
 ```
