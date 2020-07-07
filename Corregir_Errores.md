@@ -17,7 +17,7 @@ $ sudo mysql -u root -p
 ```
 Una vez que hemos accedido al servidor, seleccionamos la base de datos mysql:
 
-```mysql
+```
 MariaDB [(none)]> USE mysql;
 Reading table information for completion of table and column names
 You can turn off this feature to get a quicker startup with -A
@@ -26,7 +26,7 @@ Database changed
 ```
 Listamos el contenido de los campos user y plugin:
 
-```mysql
+```
 MariaDB [mysql]> SELECT user, plugin FROM user;
 +------------+-------------+
 | user       | plugin      |
@@ -37,7 +37,7 @@ MariaDB [mysql]> SELECT user, plugin FROM user;
 2 rows in set (0.00 sec)
 ```
 Actualizamos de unix_socket a mysql_native_password:
-```mysql
+```
 MariaDB [mysql]> UPDATE user SET plugin="mysql_native_password" WHERE user="root";
 Query OK, 1 row affected (0.00 sec)
 Rows matched: 1  Changed: 1  Warnings: 0
