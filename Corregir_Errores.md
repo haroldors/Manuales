@@ -67,3 +67,26 @@ Ahora, probamos sin sudo:
 ```
 $ mysql -u root -p
 ```
+
+---
+## Como Habilitar L2TP en LinuxMint 18 ##
+---
+En el caso que LinuxMint 18 no tenga instalado los siguientes paquetes
+
+```
+network-manager-l2tp 
+network-manager-l2tp-gnome
+```
+
+se debe primero verificar que la distribucion es la que se menciona con el siguiente comando
+
+```
+cat /etc/linuxmint/info
+```
+si corresponde la distribucion se deeb agregar el repositorio  e instalar los paquetes con los siguientes comandos
+```
+sudo add-apt-repository ppa:nm-l2tp/network-manager-l2tp
+apt-get update
+​apt-get install network-manager-l2tp network-manager-l2tp-gnome
+```
+---
