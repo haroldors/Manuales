@@ -198,6 +198,25 @@ phpenmod -v 7.3 sqlsrv pdo_sqlsrv
 
 ---
 
+## Como Asignar permisos a una carpeta para que peuda editar archivos ##
+
+como ejemplo Comenzaremos asegurándonos de que /var/www/html pertenezca al grupo www-data:
+sudo chgrp www-data /var/www/html
+
+Nos aseguramos también que nuestro usuario pertenezca al mismo grupo:
+sudo usermod -a -G www-data usuario
+
+Asignamos los permisos adecuados:
+sudo chmod -R 775 /var/www/html
+sudo chmod -R g+s /var/www/html
+
+Y por último nos aseguramos de ser los propietarios del directorio:
+sudo chown -R usuario /var/www/html
+
+En este punto ya tenemos los permisos de usuario correctamente configurados, pero como siempre es bueno comprobarlo.
+
+
+
 >**Nota:** La información contenida en este documento es un extractó de la información contenida en los siguientes Link
 
 
